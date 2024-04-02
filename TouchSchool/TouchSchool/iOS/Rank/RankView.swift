@@ -102,7 +102,3 @@ struct RankView: View {
         }
     }
 }
-
-#Preview {
-    RankView(vm: GameVM(), showRank: MainView().$showRank)
-}

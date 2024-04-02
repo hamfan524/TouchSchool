@@ -11,7 +11,6 @@ import GoogleMobileAds
 
 @main
 struct TouchSchoolApp: App {
-
     
     init() {
         FirebaseApp.configure()
