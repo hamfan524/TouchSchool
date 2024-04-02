@@ -87,7 +87,3 @@ struct SearchView: View {
         }
     }
 }
-
-#Preview {
-    SearchView(showSearch: MainView().$showSearch)
-}

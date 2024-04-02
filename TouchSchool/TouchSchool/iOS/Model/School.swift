@@ -8,15 +8,17 @@
 import Foundation
 import Alamofire
 
-struct schoolData: Codable {
+struct schoolData: Decodable {
     var dataSearch: DataSearch
 }
 
-struct DataSearch: Codable {
+struct DataSearch: Decodable {
     var content: [School]
 }
 
-struct School: Codable {
+struct School: Decodable, Hashable, Identifiable {
+    let id = UUID()
+    
     var link: String
     var adres: String
     var schoolName: String

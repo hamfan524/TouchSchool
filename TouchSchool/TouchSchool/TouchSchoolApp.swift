@@ -5,9 +5,11 @@
 //  Created by 최동호 on 10/11/23.
 //
 
-import SwiftUI
+import ComposableArchitecture
 import Firebase
 import GoogleMobileAds
+
+import SwiftUI
 
 @main
 struct TouchSchoolApp: App {
@@ -17,9 +19,16 @@ struct TouchSchoolApp: App {
         GADMobileAds.sharedInstance().start(completionHandler: nil)
     }
     
+    static let store = Store(initialState: MainFeature.State()) {
+        MainFeature()
+            ._printChanges()
+    }
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(
+                store: TouchSchoolApp.store
+            )
                 .environmentObject(SearchVM())
         }
         

@@ -5,10 +5,13 @@
 //  Created by 최동호 on 10/11/23.
 //
 
+import ComposableArchitecture
+
 import SwiftUI
 
-
 struct MainView: View {
+    @Bindable var store: StoreOf<MainFeature>
+    
     @State var showSearch: Bool = false
     @State var showGame: Bool = false
     @State var showRank: Bool = false
@@ -90,7 +93,6 @@ struct MainView: View {
                         Button(action: {
                             soundSetting.playSound(sound: .buttonBGM)
                             self.showRank = true
-                            @ObservedObject var gameVm = GameVM()
                             self.vm.fetchSchools()
                         }) {
                             Text("랭킹 보기")
