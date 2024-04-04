@@ -9,45 +9,13 @@ import ComposableArchitecture
 
 import SwiftUI
 
-@Reducer
-struct SearchFeature {
-    @ObservableState
-    struct State: Equatable {
-        var schools: IdentifiedArrayOf<School>
-    }
-    
-    enum Action {
-       case tabBackButton
-    }
-    
-    @Dependency(\.dismiss) var dismiss
-
-    var body: some ReducerOf<Self> {
-        Reduce { state, action in
-            switch action {
-            case .tabBackButton:
-                return .run { _ in
-                    await self.dismiss()
-                }
-            }
-        }
-    }
-}
-
 struct SearchView: View {
-    @EnvironmentObject var vm: SearchVM
     @State private var searchText = ""
     
     @Bindable var store: StoreOf<SearchFeature>
     
     var body: some View {
-        let searchTextBinding = Binding {
-            return searchText
-        } set: {
-            searchText = $0
-            vm.updateSearchText(with: $0)
-        }
-        
+
         ZStack{
             Image("blackboard_set")
                 .resizable()
@@ -67,31 +35,23 @@ struct SearchView: View {
                     .padding(.leading)
                     Spacer()
                 }
-                SearchBar(text: searchTextBinding, isLoading: $vm.isLoading)
+                SearchBar(store: store)
                     .padding()
                 VStack{
-                    if searchText.isEmpty {
+                    if store.text.isEmpty {
                         SearchGuide()
-                    } else if vm.viewState == .empty {
+                    } else if store.viewState == .empty {
                         Text("검색 결과가 없습니다.")
                             .foregroundColor(Color.grayText)
                             .font(.custom("Giants-Bold", size: 10))
                             .bold()
                             .padding(.top, 150)
                         
-                    } else if vm.viewState == .ready {
+                    } else if store.viewState == .ready {
                         
-                        List(vm.searchResult, id:\.seq) { school in
+                        List(store.filteredSchools) { school in
                             Button(action: {
-                                let firebaseManager = FirebaseManager(school: school)
-                                firebaseManager.isSchoolExists(seq: school.seq) { exists in
-                                    if !exists {
-                                        firebaseManager.addSchool(a: school)
-                                    }
-                                    seqValue = school.seq
-                                    myTouchCount = 0
-                                    self.searchText = ""
-                                }
+                                store.send(.selectSchool(school))
                             }) {
                                 VStack(alignment: .leading) {
                                     Text(school.schoolName)

@@ -14,8 +14,8 @@ struct GridCell: View {
             VStack {
                 Image(intro.imageName ?? "")
                         .resizable()
-                        .scaledToFit()
-                        .frame(width: 150)
+                        .scaledToFill()
+                        .frame(width: 150, height: 150)
                         .clipShape(.rect(cornerRadius: 10))
                 Text(intro.name)
                     .font(.custom("Giants-Bold", size: 15))

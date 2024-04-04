@@ -5,15 +5,14 @@
 //  Created by 최동호 on 10/11/23.
 //
 
+import ComposableArchitecture
+
 import SwiftUI
 
 struct SearchBar: View {
-    @Binding var text: String
-    @Binding var isLoading: Bool
     
-    @State private var isEditing = false
-    @State var isFocused: Bool = false
-    
+    @Bindable var store: StoreOf<SearchFeature>
+        
     var body: some View {
         ZStack(alignment: .leading) {
             HStack {
@@ -22,9 +21,10 @@ struct SearchBar: View {
                         .foregroundStyle(Color.grayText)
                         .padding(.leading, 10)
                     
-                    TextField("",text: $text,
+                    TextField("",text: $store.text.sending(\.setText),
                               prompt: Text("검색").foregroundColor(.grayText)
                                 .font(.custom("Giants-Bold", size: 16)))
+                    .font(.custom("Giants-Bold", size: 16))
                     .tint(.white)
                     .frame(height: 20)
                     .padding(8)
@@ -33,9 +33,7 @@ struct SearchBar: View {
                     .accentColor(Color.white)
                     .cornerRadius(8)
                     .onTapGesture {
-                        withAnimation {
-                            isEditing = true
-                        }
+                        store.send(.focusTextField)
                     }
                 }
                 .background(
@@ -45,10 +43,10 @@ struct SearchBar: View {
                 .overlay {
                     HStack {
                         Spacer()
-                        if isEditing && !text.isEmpty {
-                            if isLoading {
+                        if store.isEditing && !store.text.isEmpty {
+                            if store.viewState == .loading {
                                 Button {
-                                    text = ""
+                                    //
                                 } label: {
                                     ProgressView()
                                         .tint(.white)
@@ -57,7 +55,7 @@ struct SearchBar: View {
                                 .frame(width: 35, height: 35)
                             } else {
                                 Button(action: {
-                                    text = ""
+                                    store.send(.clearTextField)
                                 }) {
                                     Image(systemName: "xmark.circle.fill")
                                         .foregroundStyle(Color.grayText)
@@ -68,16 +66,15 @@ struct SearchBar: View {
                         }
                     }
                 }
-                if isEditing {
+                if store.isEditing {
                     Button {
                         withAnimation(.easeInOut(duration: 0.3)) {
-                            text = ""
-                            isEditing = false
+                            store.send(.tabCancelButton)
                             hideKeyboard()
                         }
                     } label: {
                         Text("취소")
-                            .font(.system(size: 16))
+                            .font(.custom("Giants-Bold", size: 16))                 
                             .foregroundStyle(Color.white)
                     }
                     .padding(3)

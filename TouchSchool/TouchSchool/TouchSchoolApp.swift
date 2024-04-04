@@ -28,9 +28,7 @@ struct TouchSchoolApp: App {
             ContentView(
                 store: TouchSchoolApp.store
             )
-                .environmentObject(SearchVM())
         }
-        
     }
 }
 
