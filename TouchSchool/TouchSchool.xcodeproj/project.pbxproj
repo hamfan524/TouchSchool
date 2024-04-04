@@ -14,6 +14,7 @@
 		4180AB4C2BBC54DE007F7613 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 4180AB4B2BBC54DE007F7613 /* ComposableArchitecture */; };
 		4180AB4E2BBC6196007F7613 /* DependencyValues +.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AB4D2BBC6196007F7613 /* DependencyValues +.swift */; };
 		4180AB502BBC61AD007F7613 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AB4F2BBC61AD007F7613 /* SearchResult.swift */; };
+		41861C212BBE7E7D008B75B4 /* MainFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41861C202BBE7E7D008B75B4 /* MainFeature.swift */; };
 		419793DE2B0F65D5004053E7 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 419793DD2B0F65D5004053E7 /* GoogleMobileAds */; };
 		419CE5512AD62DA700EC4105 /* TouchSchoolApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 419CE5502AD62DA700EC4105 /* TouchSchoolApp.swift */; };
 		419CE5532AD62DA700EC4105 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 419CE5522AD62DA700EC4105 /* ContentView.swift */; };
@@ -83,6 +84,7 @@
 		4180AB482BBC53EF007F7613 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		4180AB4D2BBC6196007F7613 /* DependencyValues +.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DependencyValues +.swift"; sourceTree = "<group>"; };
 		4180AB4F2BBC61AD007F7613 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
+		41861C202BBE7E7D008B75B4 /* MainFeature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainFeature.swift; sourceTree = "<group>"; };
 		419CE54D2AD62DA700EC4105 /* TouchSchool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TouchSchool.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		419CE5502AD62DA700EC4105 /* TouchSchoolApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchSchoolApp.swift; sourceTree = "<group>"; };
 		419CE5522AD62DA700EC4105 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 			isa = PBXGroup;
 			children = (
 				64857CF02B304B40001006C5 /* MainView.swift */,
+				41861C202BBE7E7D008B75B4 /* MainFeature.swift */,
 				419CE57C2AD66EA000EC4105 /* MainVM.swift */,
 			);
 			path = Main;
@@ -456,6 +459,7 @@
 				41B33AF32B0DF70C0047A56B /* MultitouchView.swift in Sources */,
 				419CE57B2AD66E8900EC4105 /* RankView.swift in Sources */,
 				419D36942B060F6900E5635D /* Smoke.swift in Sources */,
+				41861C212BBE7E7D008B75B4 /* MainFeature.swift in Sources */,
 				28350C322AF3D22C0068853A /* GameVM.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -59,9 +59,7 @@ extension SearchVM {
                 }
             } catch {
                 print("Error fetching data: \(error)")
-         
             }
-            
         }
     }
     

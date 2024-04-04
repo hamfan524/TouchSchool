@@ -5,16 +5,42 @@
 //  Created by 최동호 on 10/11/23.
 //
 
-import SwiftUI
+import ComposableArchitecture
+
 import AVKit
+import SwiftUI
+
+@Reducer
+struct GameFeature {
+    @ObservableState
+    struct State: Equatable {
+    }
+    
+    enum Action {
+       case tabBackButton
+    }
+    
+    @Dependency(\.dismiss) var dismiss
+
+    var body: some ReducerOf<Self> {
+        Reduce { state, action in
+            switch action {
+            case .tabBackButton:
+                return .run { _ in
+                    await self.dismiss()
+                }
+            }
+        }
+    }
+}
 
 struct GameView: View {
-    @ObservedObject var vm: GameVM
-    @ObservedObject var mainVM: MainVM
-    @Binding var showGame: Bool
+    @StateObject var vm = GameVM()
     @State private var isImage: Bool = false
     @State private var smokes: [Smoke] = []
     @State private var animationAmount = 0.0
+    
+    @Bindable var store: StoreOf<GameFeature>
     private let soundSetting = SoundSetting.instance
     
     var body: some View {
@@ -86,7 +112,7 @@ struct GameView: View {
             VStack{
                 HStack{
                     Button(action: {
-                        self.showGame = false
+                        store.send(.tabBackButton)
                     }) {
                         Image(systemName: "chevron.left")
                             .foregroundColor(Color.grayText)
@@ -102,8 +128,8 @@ struct GameView: View {
                 Spacer()
             }
         }
+        .navigationBarBackButtonHidden()
         .onAppear() {
-            self.mainVM.fetchSchools()
         }
         .alert(isPresented: $vm.showWarningAlert) {
             soundSetting.playSound(sound: .errorBGM)

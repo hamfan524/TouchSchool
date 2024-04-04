@@ -5,12 +5,40 @@
 //  Created by 최동호 on 10/11/23.
 //
 
+import ComposableArchitecture
+
 import SwiftUI
+
+@Reducer
+struct SearchFeature {
+    @ObservableState
+    struct State: Equatable {
+        var schools: IdentifiedArrayOf<School>
+    }
+    
+    enum Action {
+       case tabBackButton
+    }
+    
+    @Dependency(\.dismiss) var dismiss
+
+    var body: some ReducerOf<Self> {
+        Reduce { state, action in
+            switch action {
+            case .tabBackButton:
+                return .run { _ in
+                    await self.dismiss()
+                }
+            }
+        }
+    }
+}
 
 struct SearchView: View {
     @EnvironmentObject var vm: SearchVM
-    @Binding var showSearch: Bool
     @State private var searchText = ""
+    
+    @Bindable var store: StoreOf<SearchFeature>
     
     var body: some View {
         let searchTextBinding = Binding {
@@ -27,7 +55,7 @@ struct SearchView: View {
             VStack{
                 HStack{
                     Button(action: {
-                        self.showSearch = false
+                        store.send(.tabBackButton)
                     }) {
                         Image(systemName: "chevron.left")
                             .foregroundColor(Color.white)
@@ -62,7 +90,6 @@ struct SearchView: View {
                                     }
                                     seqValue = school.seq
                                     myTouchCount = 0
-                                    self.showSearch = false
                                     self.searchText = ""
                                 }
                             }) {
@@ -85,5 +112,6 @@ struct SearchView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden()
     }
 }

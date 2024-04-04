@@ -6,11 +6,37 @@
 //  Created by 최동호 on 10/11/23.
 //
 
+import ComposableArchitecture
+
 import SwiftUI
 
+@Reducer
+struct RankFeature {
+    @ObservableState
+    struct State: Equatable {
+    }
+    
+    enum Action {
+       case tabBackButton
+    }
+    
+    @Dependency(\.dismiss) var dismiss
+
+    var body: some ReducerOf<Self> {
+        Reduce { state, action in
+            switch action {
+            case .tabBackButton:
+                return .run { _ in
+                    await self.dismiss()
+                }
+            }
+        }
+    }
+}
+
 struct RankView: View {
-    @ObservedObject var vm: GameVM
-    @Binding var showRank: Bool
+    @StateObject var vm = GameVM()
+    @Bindable var store: StoreOf<RankFeature>
     
     var body: some View {
         ZStack {
@@ -30,7 +56,7 @@ struct RankView: View {
                 HStack {
                     Button(action: {
                         // Handle back button action here
-                        self.showRank = false
+                        store.send(.tabBackButton)
                     }) {
                         Image(systemName: "chevron.left")
                             .foregroundColor(.white)
@@ -100,5 +126,6 @@ struct RankView: View {
             }
             Spacer()
         }
+        .navigationBarBackButtonHidden()
     }
 }

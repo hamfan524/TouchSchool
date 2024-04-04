@@ -21,7 +21,6 @@ struct TouchSchoolApp: App {
     
     static let store = Store(initialState: MainFeature.State()) {
         MainFeature()
-            ._printChanges()
     }
     
     var body: some Scene {
