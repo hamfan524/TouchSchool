@@ -5,8 +5,10 @@
 //  Created by 최동호 on 10/11/23.
 //
 
-import Foundation
 import Alamofire
+import FirebaseFirestoreSwift
+
+import Foundation
 
 struct schoolData: Decodable {
     var dataSearch: DataSearch
@@ -18,7 +20,7 @@ struct DataSearch: Decodable {
 
 struct School: Decodable, Hashable, Identifiable {
     let id = UUID()
-    
+
     var link: String
     var adres: String
     var schoolName: String
@@ -38,8 +40,8 @@ struct School: Decodable, Hashable, Identifiable {
 }
 
 struct SchoolInfo: Decodable, Hashable, Identifiable {
-    let id = UUID()
-    
+    @DocumentID var id: String?
+
     var name: String
     var adres: String
     var seq: String

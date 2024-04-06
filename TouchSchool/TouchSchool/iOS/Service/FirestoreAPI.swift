@@ -6,6 +6,8 @@
 //
 
 import ComposableArchitecture
+import FirebaseCore
+import FirebaseFirestoreSwift
 import FirebaseFirestore
 
 import SwiftUI
@@ -15,6 +17,7 @@ protocol FirestoreAPI {
     func fetchSchool() async throws -> AsyncThrowingStream<[SchoolInfo], Error>
     func fetchMySchoolData() async throws -> AsyncThrowingStream<SchoolInfo, Error>
     func isSchoolExists(seq: String) async -> Bool
+    func submitCount(schoolInfo: SchoolInfo, count: Int) -> Void
 
 }
 
@@ -94,7 +97,33 @@ class FirestoreAPIClient: FirestoreAPI {
         }
         return false
     }
- 
+    
+    func submitCount(schoolInfo: SchoolInfo, count: Int) {
+        let sfReference = db.collection("schools").document(schoolInfo.id ?? "")
+        
+        db.runTransaction({ (transaction, errorPointer) -> Any? in
+            let sfDocument: DocumentSnapshot
+            do {
+                try sfDocument = transaction.getDocument(sfReference)
+            } catch let fetchError as NSError {
+                errorPointer?.pointee = fetchError
+                return nil
+            }
+            guard let oldCount = sfDocument.data()?["count"] as? Int else {
+                return nil
+            }
+            
+            transaction.updateData(["count": oldCount + count], forDocument: sfReference)
+            return nil
+            
+        }) { (object, error) in
+            if let error = error {
+                print("Transaction failed: \(error)")
+            } else {
+                print("Transaction successfully committed!")
+            }
+        }
+    }
 }
 
 extension DependencyValues {
@@ -103,5 +132,4 @@ extension DependencyValues {
         get { self[FirestoreAPIClientKey.self] }
         set { self[FirestoreAPIClientKey.self] = newValue }
     }
-    
 }

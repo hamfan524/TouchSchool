@@ -11,11 +11,9 @@ import SwiftUI
 
 struct MainView: View {
     @Bindable var store: StoreOf<MainFeature>
-    
     @State private var activeAlert: ActiveAlert?
     @State private var showSchoolChangeAlert = false
     @State private var showInfo = false
-    @ObservedObject var vm = MainVM()
     private let soundSetting = SoundSetting.instance
     
     var body: some View {
@@ -69,7 +67,6 @@ struct MainView: View {
                                 soundSetting.playSound(sound: .buttonBGM)
                                 store.send(.openGameView)
                             }
-                            self.vm.fetchSchools()
                         }) {
                             Text("게임 시작")
                                 .font(.custom("Giants-Bold", size: 30))
@@ -83,7 +80,6 @@ struct MainView: View {
                         
                         Button(action: {
                             soundSetting.playSound(sound: .buttonBGM)
-                            self.vm.fetchSchools()
                             store.send(.openRankView)
                         }) {
                             Text("랭킹 보기")

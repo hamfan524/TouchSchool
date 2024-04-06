@@ -17,10 +17,6 @@ struct MainFeature {
         var mySchool: SchoolInfo = .init(name: "", adres: "", seq: "", count: 0)
         var mySchoolRank: Int = 0
         var schools: IdentifiedArrayOf<School> = []
-        var schoolName: String = ""
-        var schoolAddress: String = ""
-        var schoolCnt: Int = 0
-        var schoolID: String = ""
         var schoolInfo: IdentifiedArrayOf<SchoolInfo> = []
         var isDownloading: Bool = true
         var path = StackState<Path.State>()
@@ -71,7 +67,11 @@ struct MainFeature {
                 return .none
                 
             case .openGameView:
-                state.path.append(.gameScene(GameFeature.State()))
+                state.path.append(.gameScene(GameFeature.State(
+                    mySchool: state.mySchool,
+                    mySchoolRank: state.mySchoolRank,
+                    schoolInfo: state.schoolInfo
+                )))
                 return .none
                 
             case .openRankView:
