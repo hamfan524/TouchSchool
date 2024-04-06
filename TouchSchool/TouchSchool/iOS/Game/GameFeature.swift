@@ -66,13 +66,13 @@ struct GameFeature {
                 return .none
                 
             case .submitCount:
-                if state.touchCount >= 30 {
+                if state.touchCount >= 230 {
                     soundSetting.playSound(sound: .errorBGM)
                     state.touchCount = 0
                     state.alert = AlertState {
                         TextState("비정상적인 터치수가 감지되었습니다.")
                     } actions: {
-                        ButtonState(role: .destructive, action: .warningAlert) {
+                        ButtonState(role: .cancel, action: .warningAlert) {
                             TextState("확인")
                         }
                     }
