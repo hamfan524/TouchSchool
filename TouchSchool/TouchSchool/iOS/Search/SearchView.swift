@@ -51,7 +51,7 @@ struct SearchView: View {
                         
                         List(store.filteredSchools) { school in
                             Button(action: {
-                                store.send(.selectSchool(school))
+                                store.send(.tabSchoolCell(school))
                             }) {
                                 VStack(alignment: .leading) {
                                     Text(school.schoolName)

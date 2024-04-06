@@ -37,6 +37,16 @@ struct School: Decodable, Hashable, Identifiable {
     }
 }
 
+struct SchoolInfo: Decodable, Hashable, Identifiable {
+    let id = UUID()
+    
+    var name: String
+    var adres: String
+    var seq: String
+    var count: Int
+    var rank: Int?
+}
+
 let headers: HTTPHeaders = [
     "Accept": "application/json"
 ]

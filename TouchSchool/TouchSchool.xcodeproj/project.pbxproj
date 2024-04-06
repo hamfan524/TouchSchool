@@ -12,11 +12,11 @@
 		413E97502B2F56E20055BF85 /* IntroGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 413E974F2B2F56E20055BF85 /* IntroGridView.swift */; };
 		4180AB472BBC5312007F7613 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4180AB462BBC5312007F7613 /* GoogleService-Info.plist */; };
 		4180AB4C2BBC54DE007F7613 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 4180AB4B2BBC54DE007F7613 /* ComposableArchitecture */; };
-		4180AB4E2BBC6196007F7613 /* DependencyValues +.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AB4D2BBC6196007F7613 /* DependencyValues +.swift */; };
 		4180AB502BBC61AD007F7613 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4180AB4F2BBC61AD007F7613 /* SearchResult.swift */; };
 		41861C212BBE7E7D008B75B4 /* MainFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41861C202BBE7E7D008B75B4 /* MainFeature.swift */; };
 		41861C232BBEA55D008B75B4 /* SearchFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41861C222BBEA55D008B75B4 /* SearchFeature.swift */; };
 		41861C252BBEA93E008B75B4 /* Enums +.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41861C242BBEA93E008B75B4 /* Enums +.swift */; };
+		41861C2B2BBF005F008B75B4 /* FirestoreAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41861C2A2BBF005F008B75B4 /* FirestoreAPI.swift */; };
 		419793DE2B0F65D5004053E7 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 419793DD2B0F65D5004053E7 /* GoogleMobileAds */; };
 		419CE5512AD62DA700EC4105 /* TouchSchoolApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 419CE5502AD62DA700EC4105 /* TouchSchoolApp.swift */; };
 		419CE5532AD62DA700EC4105 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 419CE5522AD62DA700EC4105 /* ContentView.swift */; };
@@ -83,11 +83,11 @@
 		413E974F2B2F56E20055BF85 /* IntroGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroGridView.swift; sourceTree = "<group>"; };
 		4180AB462BBC5312007F7613 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4180AB482BBC53EF007F7613 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		4180AB4D2BBC6196007F7613 /* DependencyValues +.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DependencyValues +.swift"; sourceTree = "<group>"; };
 		4180AB4F2BBC61AD007F7613 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		41861C202BBE7E7D008B75B4 /* MainFeature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainFeature.swift; sourceTree = "<group>"; };
 		41861C222BBEA55D008B75B4 /* SearchFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFeature.swift; sourceTree = "<group>"; };
 		41861C242BBEA93E008B75B4 /* Enums +.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Enums +.swift"; sourceTree = "<group>"; };
+		41861C2A2BBF005F008B75B4 /* FirestoreAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreAPI.swift; sourceTree = "<group>"; };
 		419CE54D2AD62DA700EC4105 /* TouchSchool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TouchSchool.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		419CE5502AD62DA700EC4105 /* TouchSchoolApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchSchoolApp.swift; sourceTree = "<group>"; };
 		419CE5522AD62DA700EC4105 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -172,6 +172,15 @@
 			path = Info;
 			sourceTree = "<group>";
 		};
+		41861C272BBF0026008B75B4 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				41861C2A2BBF005F008B75B4 /* FirestoreAPI.swift */,
+				4180AB4F2BBC61AD007F7613 /* SearchResult.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
 		419793E32B0F7113004053E7 /* AD */ = {
 			isa = PBXGroup;
 			children = (
@@ -222,6 +231,7 @@
 		419CE55E2AD62EBF00EC4105 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				41861C272BBF0026008B75B4 /* Service */,
 				419793E32B0F7113004053E7 /* AD */,
 				419CE5742AD66E5100EC4105 /* Rank */,
 				419CE5642AD62F8700EC4105 /* Main */,
@@ -239,8 +249,6 @@
 			children = (
 				64857CF62B304E5E001006C5 /* Person.swift */,
 				419CE5602AD62EFE00EC4105 /* School.swift */,
-				4180AB4F2BBC61AD007F7613 /* SearchResult.swift */,
-				4180AB4D2BBC6196007F7613 /* DependencyValues +.swift */,
 				419D36932B060F6900E5635D /* Smoke.swift */,
 			);
 			path = Model;
@@ -445,6 +453,7 @@
 				41861C232BBEA55D008B75B4 /* SearchFeature.swift in Sources */,
 				413E974E2B2F56AA0055BF85 /* GridCell.swift in Sources */,
 				41EE9F352AF4F71D006D560B /* FirebaseManager.swift in Sources */,
+				41861C2B2BBF005F008B75B4 /* FirestoreAPI.swift in Sources */,
 				419CE5772AD66E6D00EC4105 /* GameView.swift in Sources */,
 				413E97502B2F56E20055BF85 /* IntroGridView.swift in Sources */,
 				419CE5612AD62EFE00EC4105 /* School.swift in Sources */,
@@ -452,7 +461,6 @@
 				64857CF12B304B40001006C5 /* MainView.swift in Sources */,
 				419CE5722AD63A3200EC4105 /* ActivityIndicator.swift in Sources */,
 				419CE56E2AD63A0A00EC4105 /* SearchBar.swift in Sources */,
-				4180AB4E2BBC6196007F7613 /* DependencyValues +.swift in Sources */,
 				419CE5512AD62DA700EC4105 /* TouchSchoolApp.swift in Sources */,
 				64FF7A1E2B13FE7A00795360 /* InfoView.swift in Sources */,
 				419CE57D2AD66EA000EC4105 /* MainVM.swift in Sources */,

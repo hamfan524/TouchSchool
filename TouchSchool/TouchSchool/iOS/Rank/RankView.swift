@@ -14,10 +14,15 @@ import SwiftUI
 struct RankFeature {
     @ObservableState
     struct State: Equatable {
+        var mySchool: SchoolInfo
+        var mySchoolRank: Int
+        var schoolInfo: IdentifiedArrayOf<SchoolInfo>
+        var openAdView: Bool = true
     }
     
     enum Action {
-       case tabBackButton
+        case closeAd
+        case tabBackButton
     }
     
     @Dependency(\.dismiss) var dismiss
@@ -25,6 +30,9 @@ struct RankFeature {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+            case .closeAd:
+                state.openAdView = false
+                return .none
             case .tabBackButton:
                 return .run { _ in
                     await self.dismiss()
@@ -35,20 +43,20 @@ struct RankFeature {
 }
 
 struct RankView: View {
-    @StateObject var vm = GameVM()
     @Bindable var store: StoreOf<RankFeature>
     
     var body: some View {
         ZStack {
-            if vm.visitCount % 8 == 0 {
+            if store.openAdView {
                 InterstitialAdView()
+                    .onAppear {
+                        store.send(.closeAd)
+                    }
             }
+            
             Image("blackboard_set")
                 .resizable()
                 .ignoresSafeArea()
-                .onAppear() {
-                    vm.visitCount += 1
-                }
             
             //꾸밈화면
             VStack {
@@ -77,17 +85,17 @@ struct RankView: View {
                         .padding()
                     
                     VStack {
-                        Text("\(vm.mySchoolName)")
+                        Text("\(store.mySchool.name)")
                             .foregroundStyle(.mint)
                             .font(.custom("Giants-Bold", size: 30))
                             .padding(.top)
                         
                         HStack {
-                            Text("\(mySchoolRank)위 ")
+                            Text("\(store.mySchoolRank)위 ")
                                 .foregroundStyle(.white)
                                 .font(.custom("Giants-Bold", size: 30))
                             
-                            Text("\(vm.mySchoolCnt)")
+                            Text("\(store.mySchool.count)")
                                 .foregroundStyle(.white)
                                 .font(.custom("Giants-Bold", size: 30))
                             
@@ -99,20 +107,16 @@ struct RankView: View {
                 // 학교 순위리스트
                 List {
                     LazyVStack(alignment: .leading) {
-                        ForEach(allSchoolInfos) { schoolInfo in
+                        ForEach(store.schoolInfo.indices) { index in
                             HStack {
-                                if let rank = schoolInfo.rank {
-                                    Text("\(rank)위 ")
+                                Text("\(index + 1)위 ")
                                         .font(.custom("Giants-Bold", size: 15))
-                                } else {
-                                    Text("0")
-                                        .font(.custom("Giants-Bold", size: 15))
-                                }
-                                Text(schoolInfo.name)
+                                
+                                Text(store.schoolInfo[index].name)
                                     .font(.custom("Giants-Bold", size: 15))
                                     .frame(width: 150, height: 25, alignment: .leading)
                                 
-                                Text("\(schoolInfo.count)")
+                                Text("\(store.schoolInfo[index].count)")
                                     .font(.custom("Giants-Bold", size: 15))
                             }
                             .foregroundColor(.white)

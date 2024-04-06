@@ -9,13 +9,7 @@ import Foundation
 import FirebaseFirestore
 import FirebaseCore
 
-struct SchoolInfo: Identifiable {
-    var id: String
-    var name: String
-    var address: String
-    var count: Int
-    var rank: Int?
-}
+
 
 class MainVM: ObservableObject {
     //이걸 넣어줘야야 데이터를 변화를 감지함
@@ -35,32 +29,32 @@ class MainVM: ObservableObject {
             
                 var schoolInfos = [SchoolInfo]()
                 
-                for document in documents {
-                    let mySchoolName = document.data()["name"] as? String ?? ""
-                    let mySchoolAdres = document.data()["adres"] as? String ?? ""
-                    let mySchoolCnt = document.data()["count"] as? Int ?? 0
-                    let mySchoolId = document.documentID
-                    
-                    let schoolInfo = SchoolInfo(id: mySchoolId, name: mySchoolName, address: mySchoolAdres, count: mySchoolCnt)
-                    schoolInfos.append(schoolInfo)
-                }
-                allSchoolInfos = schoolInfos
+//                for document in documents {
+//                    let mySchoolName = document.data()["name"] as? String ?? ""
+//                    let mySchoolAdres = document.data()["adres"] as? String ?? ""
+//                    let mySchoolCnt = document.data()["count"] as? Int ?? 0
+//                    let mySchoolId = document.documentID
+//                    
+//                    let schoolInfo = SchoolInfo(id: mySchoolId, name: mySchoolName, address: mySchoolAdres, count: mySchoolCnt)
+//                    schoolInfos.append(schoolInfo)
+//                }
+//                allSchoolInfos = schoolInfos
                 
                 //순위 부여 함수 호출
-                self.rankSchoolInfos()
+//                self.rankSchoolInfos()
             }
     }
     
     func rankSchoolInfos() {
         // count 기준 내림차순으로 정렬
-        allSchoolInfos.sort { $0.count > $1.count }
-        
-        // 각 항목에 순위를 할당합니다.
-        for index in allSchoolInfos.indices {
-            if allSchoolInfos[index].id == myID {
-                mySchoolRank = index + 1
-            }
-            allSchoolInfos[index].rank = index + 1
-        }
+//        allSchoolInfos.sort { $0.count > $1.count }
+//        
+//        // 각 항목에 순위를 할당합니다.
+//        for index in allSchoolInfos.indices {
+//            if allSchoolInfos[index].id == myID {
+//                mySchoolRank = index + 1
+//            }
+//            allSchoolInfos[index].rank = index + 1
+//        }
     }
 }

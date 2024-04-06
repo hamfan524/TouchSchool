@@ -21,23 +21,37 @@ struct SearchFeature {
     }
     
     enum Action {
+        case addSchool((Bool, School))
         case clearTextField
         case filteringSchools
         case setSchools(IdentifiedArrayOf<School>)
         case setText(String)
         case setViewState(ViewState)
-        case selectSchool(School)
         case tabBackButton
         case tabCancelButton
+        case tabSchoolCell(School)
         case focusCancelTextField
         case focusTextField
     }
     
     @Dependency(\.dismiss) var dismiss
+    @Dependency(\.firestoreAPI) var firestoreAPI
 
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+            case let .addSchool((isExist, school)):
+                if !isExist {
+                    self.firestoreAPI.addSchool(school: school)
+                }
+
+                seqValue = school.seq
+                myTouchCount = 0
+                
+                return .run { send in
+                    await send(.tabBackButton)
+                }
+                
             case .clearTextField:
                 state.text = ""
                 return .none
@@ -82,21 +96,6 @@ struct SearchFeature {
             case let .setViewState(viewState):
                 state.viewState = viewState
                 return .none
-                
-            case let .selectSchool(school):
-                let firebaseManager = FirebaseManager(school: school)
-                
-                firebaseManager.isSchoolExists(seq: school.seq) { exists in
-                    if !exists {
-                        firebaseManager.addSchool(a: school)
-                    }
-                    seqValue = school.seq
-                    myTouchCount = 0
-                }
-                
-                return .run { send in
-                    await send(.tabBackButton)
-                }
             
             case .tabBackButton:
                 return .run { _ in
@@ -107,6 +106,10 @@ struct SearchFeature {
                 return .run { send in
                     await send(.clearTextField)
                     await send(.focusCancelTextField)
+                }
+            case let .tabSchoolCell(school):
+                return .run { send in
+                    await send(.addSchool((self.firestoreAPI.isSchoolExists(seq: school.seq), school)))
                 }
             }
         }
