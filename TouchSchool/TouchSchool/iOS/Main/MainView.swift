@@ -154,5 +154,9 @@ struct MainView: View {
                 }
             }
         }
+        .onAppear {
+            print(store.schools[0])
+            print(store.mySchool)
+        }
     }
 }

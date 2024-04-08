@@ -33,6 +33,19 @@ class FirestoreAPIClient: FirestoreAPI {
         db.collection("schools").addDocument(data: school.dictionary)
     }
     
+    /*
+     fetch: {
+         do {
+             @Dependency(\.databaseService.context) var context
+             let itemContext = try context()
+             let descriptor = FetchDescriptor<YouthPolicy>()
+             return try itemContext.fetch(descriptor)
+         } catch {
+             throw SwiftDataError.fetchError
+         }
+     }
+     */
+    
     func fetchSchool() async throws -> AsyncThrowingStream<[SchoolInfo], Error> {
         AsyncThrowingStream<[SchoolInfo], Error> { continuation in
             let collection = db.collection("schools").order(by: "count", descending: true)
