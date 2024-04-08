@@ -5,28 +5,20 @@
 //  Created by 최동호 on 10/11/23.
 //
 
+import ComposableArchitecture
+
 import SwiftUI
 
-
 struct MainView: View {
-    @State var showSearch: Bool = false
-    @State var showGame: Bool = false
-    @State var showRank: Bool = false
+    @Bindable var store: StoreOf<MainFeature>
     @State private var activeAlert: ActiveAlert?
     @State private var showSchoolChangeAlert = false
     @State private var showInfo = false
-    @ObservedObject var vm = MainVM()
     private let soundSetting = SoundSetting.instance
     
     var body: some View {
-        ZStack{
-            if showGame {
-                GameView(vm: GameVM(), mainVM: MainVM(), showGame: self.$showGame)
-            } else if showSearch {
-                SearchView(showSearch: self.$showSearch)
-            } else if showRank {
-                RankView(vm: GameVM(), showRank: self.$showRank)
-            } else {
+        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+            ZStack{
                 Image("blackboard_set")
                     .resizable()
                     .ignoresSafeArea()
@@ -73,9 +65,8 @@ struct MainView: View {
                                 activeAlert = .schoolSelect
                             } else {
                                 soundSetting.playSound(sound: .buttonBGM)
-                                self.showGame = true
+                                store.send(.openGameView)
                             }
-                            self.vm.fetchSchools()
                         }) {
                             Text("게임 시작")
                                 .font(.custom("Giants-Bold", size: 30))
@@ -89,9 +80,7 @@ struct MainView: View {
                         
                         Button(action: {
                             soundSetting.playSound(sound: .buttonBGM)
-                            self.showRank = true
-                            @ObservedObject var gameVm = GameVM()
-                            self.vm.fetchSchools()
+                            store.send(.openRankView)
                         }) {
                             Text("랭킹 보기")
                                 .font(.custom("Giants-Bold", size: 30))
@@ -108,7 +97,7 @@ struct MainView: View {
                             if myTouchCount != 0 {
                                 activeAlert = .schoolChange
                             } else {
-                                self.showSearch = true
+                                store.send(.openSearchView)
                             }
                         }) {
                             Text("학교 선택")
@@ -134,7 +123,7 @@ struct MainView: View {
                                 .font(.custom("Giants-Bold", size: 6)),
                             dismissButton: .default(Text("확인")
                                 .font(.custom("Giants-Bold", size: 8))) {
-                                    self.showSearch = true
+                                    store.send(.openSearchView)
                                 }
                         )
                     case .schoolSelect:
@@ -149,14 +138,21 @@ struct MainView: View {
                     }
                 }
             }
+        } destination: { store in
+            switch store.state {
+            case .gameScene(_):
+                if let store = store.scope(state: \.gameScene, action: \.gameScene) {
+                    GameView(store: store)
+                }
+            case .rankScene(_):
+                if let store = store.scope(state: \.rankScene, action: \.rankScene) {
+                    RankView(store: store)
+                }
+            case .searchScene(_):
+                if let store = store.scope(state: \.searchScene, action: \.searchScene) {
+                    SearchView(store: store)
+                }
+            }
         }
-    }
-}
-
-struct titleImage: View {
-    var body: some View {
-        Image("noname")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
     }
 }

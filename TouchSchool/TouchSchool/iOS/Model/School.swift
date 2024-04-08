@@ -5,18 +5,22 @@
 //  Created by 최동호 on 10/11/23.
 //
 
-import Foundation
 import Alamofire
+import FirebaseFirestoreSwift
 
-struct schoolData: Codable {
+import Foundation
+
+struct schoolData: Decodable {
     var dataSearch: DataSearch
 }
 
-struct DataSearch: Codable {
+struct DataSearch: Decodable {
     var content: [School]
 }
 
-struct School: Codable {
+struct School: Decodable, Hashable, Identifiable {
+    let id = UUID()
+
     var link: String
     var adres: String
     var schoolName: String
@@ -35,6 +39,16 @@ struct School: Codable {
     }
 }
 
+struct SchoolInfo: Decodable, Hashable, Identifiable {
+    @DocumentID var id: String?
+
+    var name: String
+    var adres: String
+    var seq: String
+    var count: Int
+    var rank: Int?
+}
+
 let headers: HTTPHeaders = [
     "Accept": "application/json"
 ]
@@ -48,9 +62,11 @@ var seqValue: String {
     }
 }
 
+var pathId: String = ""
+
+var allSchoolInfos = [SchoolInfo]()
 var myID = ""
 var mySchoolRank: Int = 0
-var allSchoolInfos = [SchoolInfo]()
 var myTouchCount: Int {
     get {
         UserDefaults.standard.integer(forKey: "myTouchCount")

@@ -5,25 +5,30 @@
 //  Created by 최동호 on 10/11/23.
 //
 
-import SwiftUI
+import ComposableArchitecture
 import Firebase
 import GoogleMobileAds
 
+import SwiftUI
+
 @main
 struct TouchSchoolApp: App {
-
     
     init() {
         FirebaseApp.configure()
         GADMobileAds.sharedInstance().start(completionHandler: nil)
     }
     
+    static let store = Store(initialState: MainFeature.State()) {
+        MainFeature()
+    }
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(SearchVM())
+            ContentView(
+                store: TouchSchoolApp.store
+            )
         }
-        
     }
 }
 
