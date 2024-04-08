@@ -17,9 +17,9 @@ struct GameFeature {
         @Presents var alert: AlertState<Action.Alert>?
         var animationAmount = 0.0
         var isTimerRunning = false
-        var mySchool: SchoolInfo
-        var mySchoolRank: Int
-        var schoolInfo: IdentifiedArrayOf<SchoolInfo>
+        var mySchool: SchoolInfo = .init(name: "", adres: "", seq: "", count: 0)
+        var mySchoolRank: Int = 0
+        var schoolInfo: IdentifiedArrayOf<SchoolInfo> = []
         var smokes: IdentifiedArrayOf<Smoke> = []
         var touchCount: Int = 0
     }

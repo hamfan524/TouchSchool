@@ -67,6 +67,7 @@ struct MainFeature {
                 return .none
                 
             case .openGameView:
+                pathId = "game"
                 state.path.append(.gameScene(GameFeature.State(
                     mySchool: state.mySchool,
                     mySchoolRank: state.mySchoolRank,
@@ -75,6 +76,7 @@ struct MainFeature {
                 return .none
                 
             case .openRankView:
+                pathId = "rank"
                 state.path.append(.rankScene(RankFeature.State(
                     mySchool: state.mySchool,
                     mySchoolRank: state.mySchoolRank,
@@ -83,6 +85,7 @@ struct MainFeature {
                 return .none
                 
             case .openSearchView:
+                pathId = "search"
                 state.path.append(.searchScene(SearchFeature.State(
                     schools: state.schools
                 )))
@@ -92,10 +95,35 @@ struct MainFeature {
                 return .none
                 
             case let .rankDataResponse(schoolInfo):
-                print(schoolInfo)
                 state.schoolInfo = IdentifiedArray(uniqueElements: schoolInfo)
+                
                 let myRank = schoolInfo.firstIndex(where: { $0.seq == seqValue }) ?? (schoolInfo.count - 1)
                 state.mySchoolRank = myRank + 1
+                
+                if !state.path.isEmpty {
+                    let key = state.path.ids.first!
+                    
+                    switch pathId {
+                    case "game":
+                        state.path[id: key] = .gameScene(GameFeature.State(
+                            mySchool: state.mySchool,
+                            mySchoolRank: state.mySchoolRank,
+                            schoolInfo: state.schoolInfo
+                        ))
+                        
+                    case "rank":
+                        state.path[id: key] = .rankScene(RankFeature.State(
+                            mySchool: state.mySchool,
+                            mySchoolRank: state.mySchoolRank,
+                            schoolInfo: state.schoolInfo,
+                            openAdView: false
+                        ))
+                        
+                    default:
+                        break
+                    }
+                }
+                
                 return .run { send in
                     try await send(.dataResponse(self.searchResult.fetch([eSchoolUrl, mSchoolUrl, hSchoolUrl])))
                 }

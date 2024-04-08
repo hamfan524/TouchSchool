@@ -14,10 +14,10 @@ struct SearchFeature {
     @ObservableState
     struct State: Equatable {
         var isEditing: Bool = false
-        var schools: IdentifiedArrayOf<School>
+        var schools: IdentifiedArrayOf<School> = []
         var filteredSchools: IdentifiedArrayOf<School> = []
         var text: String = ""
-        var viewState: ViewState = ViewState.empty
+        var viewState: ViewState = .empty
     }
     
     enum Action {

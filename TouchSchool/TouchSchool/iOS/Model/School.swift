@@ -62,9 +62,11 @@ var seqValue: String {
     }
 }
 
+var pathId: String = ""
+
+var allSchoolInfos = [SchoolInfo]()
 var myID = ""
 var mySchoolRank: Int = 0
-var allSchoolInfos = [SchoolInfo]()
 var myTouchCount: Int {
     get {
         UserDefaults.standard.integer(forKey: "myTouchCount")

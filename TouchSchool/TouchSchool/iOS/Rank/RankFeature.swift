@@ -13,9 +13,9 @@ import SwiftUI
 struct RankFeature {
     @ObservableState
     struct State: Equatable {
-        var mySchool: SchoolInfo
-        var mySchoolRank: Int
-        var schoolInfo: IdentifiedArrayOf<SchoolInfo>
+        var mySchool: SchoolInfo = .init(name: "", adres: "", seq: "", count: 0)
+        var mySchoolRank: Int = 0
+        var schoolInfo: IdentifiedArrayOf<SchoolInfo> = []
         var openAdView: Bool = true
     }
     
