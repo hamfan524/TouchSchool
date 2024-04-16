@@ -25,17 +25,21 @@
 [![Firebase](https://img.shields.io/badge/Firebase-10.16.0-green)]()
 [![Alamofire](https://img.shields.io/badge/Alamofire-5.8.0-red)]()
 [![GoogleMobileAds](https://img.shields.io/badge/GoogleMobileAds-10.13.0-yellow)]()
+[![The Composable Architecture](https://img.shields.io/badge/TheComposableArchitecture-1.9.2-brown)]()
 
 ## 🌲 Tree
 ```
 📦TouchSchool
+ ┣ 📂Preview Content
+ ┃ ┗ 📂Preview Assets.xcassets
+ ┃ ┃ ┗ 📜Contents.json
  ┣ 📂iOS
  ┃ ┣ 📂AD
- ┃ ┃ ┣ 📜BannerView.swift
- ┃ ┃ ┗ 📜BannerViewController.swift
+ ┃ ┃ ┗ 📜InterstitialAdView.swift
  ┃ ┣ 📂Game
- ┃ ┃ ┣ 📜GameVM.swift
- ┃ ┃ ┗ 📜GameView.swift
+ ┃ ┃ ┣ 📜GameFeature.swift
+ ┃ ┃ ┣ 📜GameView.swift
+ ┃ ┃ ┗ 📜SmokeEffectView.swift
  ┃ ┣ 📂Helpers
  ┃ ┃ ┣ 📂Font
  ┃ ┃ ┃ ┣ 📜Giants-Bold.otf
@@ -45,35 +49,45 @@
  ┃ ┃ ┃ ┣ 📜buttonBGM.mp3
  ┃ ┃ ┃ ┣ 📜errorBGM.mp3
  ┃ ┃ ┃ ┗ 📜mainBGM.mp3
- ┃ ┃ ┣ 📜ActivityIndicator.swift
+ ┃ ┃ ┣ 📜.DS_Store
+ ┃ ┃ ┣ 📜ActiveAlert.swift
  ┃ ┃ ┣ 📜Audio.swift
  ┃ ┃ ┣ 📜Colors.swift
+ ┃ ┃ ┣ 📜Enums +.swift
  ┃ ┃ ┣ 📜Helpers.swift
- ┃ ┃ ┣ 📜infoView.swift
  ┃ ┃ ┣ 📜MultitouchRepresentable.swift
  ┃ ┃ ┗ 📜MultitouchView.swift
+ ┃ ┣ 📂Info
+ ┃ ┃ ┣ 📜GridCell.swift
+ ┃ ┃ ┣ 📜InfoView.swift
+ ┃ ┃ ┗ 📜IntroGridView.swift
  ┃ ┣ 📂Main
- ┃ ┃ ┣ 📜MainVM.swift
+ ┃ ┃ ┣ 📜MainFeature.swift
  ┃ ┃ ┗ 📜MainView.swift
  ┃ ┣ 📂Model
+ ┃ ┃ ┣ 📜Person.swift
  ┃ ┃ ┣ 📜School.swift
  ┃ ┃ ┗ 📜Smoke.swift
  ┃ ┣ 📂Rank
+ ┃ ┃ ┣ 📜RankFeature.swift
  ┃ ┃ ┗ 📜RankView.swift
- ┃ ┗ 📂Search
- ┃ ┃ ┣ 📜FirebaseManager.swift
+ ┃ ┣ 📂Search
  ┃ ┃ ┣ 📜SearchBar.swift
+ ┃ ┃ ┣ 📜SearchFeature.swift
  ┃ ┃ ┣ 📜SearchGuide.swift
- ┃ ┃ ┣ 📜SearchVM.swift
  ┃ ┃ ┗ 📜SearchView.swift
+ ┃ ┣ 📂Service
+ ┃ ┃ ┣ 📜FirestoreAPI.swift
+ ┃ ┃ ┗ 📜SearchResult.swift
+ ┃ ┗ 📜.DS_Store
+ ┣ 📜.DS_Store
  ┣ 📜ContentView.swift
- ┣ 📜GoogleService-Info.plist
  ┣ 📜Info.plist
  ┗ 📜TouchSchoolApp.swift
 ```
 
 ## 🔑 키워드
-- `MVVM`
+- `The Composable Architecture`
 - `URLSession`
 - `Alamofire`
 - `Firebase`
@@ -129,6 +143,23 @@
     - 오디오 재생 백그라운드 스레드에서 처리
 </details>
 
+<details>
+<summary>Step 4 타임라인</summary>
+
+- 24.04.03
+    - TCA 라이브러리 설치 
+    - 학교 공공데이터 API 받아오는 로직 뷰모델에서 리듀서에서 받아오고 관리하도록 로직 수정
+- 24.04.04
+    - 변수의 True/False로 화면을 전환하던 방식에서 Navigation을 사용하도록 수정
+    - SearchView MVVM 패턴에서 TCA 패턴으로 변경
+- 24.04.06
+    - RankView, GameView TCA 패턴 적용
+    - 이전에 사용하던 ViewModel들 삭제
+- 24.04.08
+    - 파이어베이스 리스너 리듀서에서 처리하도록 적용
+    - Main리듀서에서 Rank리듀서와 GameReducer에 데이터 전달하도록 구현
+
+</details>
 
 ## 📱 실행 화면
 
@@ -369,4 +400,145 @@ ForEach(smokes) { smoke in
         
     }
 ```
+</details>
+
+
+### Step 4
+<details>
+<summary>TCA아키텍처 적용하며 생겼던 문제들</summary>
+
+### 1. 문제 정의
+
+- 자식 리듀서와 공유하고 있는 부모 리듀서의 state값이 변해도 자식리듀서에서 값이 업데이트 되지 않는 오류
+
+### 2. 사실 수집
+
+- MainFeature에서 스냅샷 리스너로 바라보고 있는 랭킹 데이터가 업데이트 되어도 RankFeature에서 공유받고 있는 랭킹 데이터는 업데이트 되지 않음
+
+### 3. 원인 추론
+
+- 일반적으로 부모 리듀서가 자식 리듀서에게 값을 전달해주는 방식으로는, 부모 리듀서에서 state값의 상태 변화를 자식 리듀서는 알 수 없음
+
+### 4. 해결방법
+
+- SharedState 사용법을 학습하지 못해, 다른 방식으로 해결
+- 메인 path에서 추가되는 리듀서가 최대 1개씩 추가되는 경우밖에 없어, 직접 찾아서 업데이트 해주는 방식을 사용 
+- 부모리듀서에서 state의 값이 변할 때, Path에서 키값 ID를 찾아서 해당 자식리듀서를 업데이트 해줌
+- 현재 PointFree 강의를 구매해 SharedState 사용방법을 학습 중
+
+### 해결 코드 
+
+```Swift
+// 전역으로 pathId 선언
+var pathId: String = ""
+
+// 부모 리듀서
+@Reducer
+struct MainFeature {
+    @ObservableState
+    struct State: Equatable {
+        var mySchool: SchoolInfo = .init(name: "", adres: "", seq: "", count: 0)
+        var mySchoolRank: Int = 0
+        var schools: IdentifiedArrayOf<School> = []
+        var schoolInfo: IdentifiedArrayOf<SchoolInfo> = []
+        var path = StackState<Path.State>()
+    }
+    
+    enum Action {
+        // 나머지 액션들
+        
+        case openRankView
+        case path(StackAction<Path.State, Path.Action>)
+        case rankDataResponse([SchoolInfo])
+    }
+    
+    @Dependency(\.firestoreAPI) var firestoreAPI
+
+    var body: some ReducerOf<Self> {
+        Reduce { state, action in
+            switch action {
+
+            // 나머지 로직
+                
+            // 처음 랭킹뷰 열 때 스택에 추가
+            case .openRankView:
+                pathId = "rank"
+                state.path.append(.rankScene(RankFeature.State(
+                    mySchool: state.mySchool,
+                    mySchoolRank: state.mySchoolRank,
+                    schoolInfo: state.schoolInfo
+                )))
+                return .none
+                
+            case let .rankDataResponse(schoolInfo):
+                
+                if !state.path.isEmpty {
+                    let key = state.path.ids.first!
+                    
+                    // state값이 변하면, pathId에 따라 id값을 찾아서 해당 리듀서를 업데이트
+                    switch pathId {
+                    case "game":
+                        state.path[id: key] = .gameScene(GameFeature.State(
+                            mySchool: state.mySchool,
+                            mySchoolRank: state.mySchoolRank,
+                            schoolInfo: state.schoolInfo
+                        ))
+                        
+                    case "rank":
+                        state.path[id: key] = .rankScene(RankFeature.State(
+                            mySchool: state.mySchool,
+                            mySchoolRank: state.mySchoolRank,
+                            schoolInfo: state.schoolInfo,
+                            openAdView: false
+                        ))
+                        
+                    default:
+                        break
+                    }
+                }
+                
+                return .run { send in
+                    try await send(.dataResponse(self.searchResult.fetch([eSchoolUrl, mSchoolUrl, hSchoolUrl])))
+                }
+                
+            }
+        }
+        .forEach(\.path, action: \.path) {
+            Path()
+        }
+    }
+}
+
+
+
+// 자식 리듀서
+@Reducer
+struct RankFeature {
+    @ObservableState
+    struct State: Equatable {
+        var mySchool: SchoolInfo = .init(name: "", adres: "", seq: "", count: 0)
+        var mySchoolRank: Int = 0
+        var schoolInfo: IdentifiedArrayOf<SchoolInfo> = []
+    }
+    
+    enum Action {
+        case tabBackButton
+    }
+    
+    @Dependency(\.dismiss) var dismiss
+
+    var body: some ReducerOf<Self> {
+        Reduce { state, action in
+            switch action {
+            case .tabBackButton:
+                return .run { _ in
+                    await self.dismiss()
+                }
+            }
+        }
+    }
+}
+
+```
+
 </details>
